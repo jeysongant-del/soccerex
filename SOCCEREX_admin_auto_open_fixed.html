@@ -1,0 +1,2233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SOCCEREX · Smart Football Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+    <style>
+        /* ─── ROOT ─── */
+        :root {
+            --bg: #0a0c1a;
+            --card: #12162d;
+            --text: #f0f0f0;
+            --green: #00E676;
+            --pink: #FF66C0;
+            --red: #FF3D3D;
+            --gold: #ffd700;
+            --telegram: #0088cc;
+            --toast-bg: #1a1e3a;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+            --orange: #FF8C00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--pink);
+            border-radius: 10px;
+        }
+
+        /* ─── HEADER ─── */
+        .header {
+            position: sticky;
+            top: 0;
+            background: rgba(10, 12, 26, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #1e2548;
+            z-index: 1000;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.4rem;
+            background: linear-gradient(to right, var(--green), var(--pink));
+            -webkit-background-clip: text;
+            color: transparent;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .header-center {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .country-selector {
+            background: #1a1e3a;
+            border: 1px solid #2d345e;
+            border-radius: 30px;
+            padding: 6px 14px 6px 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .country-selector:hover {
+            border-color: var(--gold);
+        }
+        .country-selector select {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 4px 0;
+            outline: none;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            max-width: 160px;
+        }
+        .country-selector select option {
+            background: #1a1e3a;
+            color: #fff;
+        }
+        .country-selector .flag {
+            font-size: 1.2rem;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-weight: 600;
+            opacity: 0.8;
+            transition: 0.3s;
+            padding: 6px 10px;
+            border-radius: 20px;
+        }
+        nav a:hover {
+            opacity: 1;
+            color: var(--pink);
+            background: rgba(255, 102, 192, 0.1);
+        }
+        nav a.special-link {
+            color: var(--orange);
+        }
+        nav a.special-link:hover {
+            background: rgba(255, 140, 0, 0.15);
+        }
+
+        /* ─── CONTAINER ─── */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .section-card {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 1px solid #1e2548;
+            transition: border 0.3s;
+        }
+        .section-card:hover {
+            border-color: #2d345e;
+        }
+
+        .section-title {
+            color: var(--green);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            flex-wrap: wrap;
+        }
+        .section-title.special-title {
+            color: var(--orange);
+        }
+
+        /* ─── SUB-TABS (for SPECIAL) ─── */
+        .sub-tabs {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #1e2548;
+            padding-bottom: 10px;
+        }
+        .sub-tab-btn {
+            background: #1a1e3a;
+            border: none;
+            color: #aaa;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .sub-tab-btn:hover {
+            background: #2d345e;
+            color: #fff;
+        }
+        .sub-tab-btn.active {
+            background: var(--orange);
+            color: #000;
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.3);
+        }
+        .sub-tab-content {
+            display: none;
+        }
+        .sub-tab-content.active {
+            display: block;
+        }
+
+        /* ─── PREDICTION ITEM ─── */
+        .prediction-item {
+            background: #070918;
+            padding: 15px;
+            border-radius: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--green);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .prediction-item .match-info {
+            flex: 1;
+            min-width: 120px;
+        }
+        .prediction-item .match-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .prediction-item .match-time {
+            font-size: 0.7rem;
+            opacity: 0.6;
+            margin-top: 2px;
+        }
+        .prediction-item .pick-detail {
+            font-size: 0.7rem;
+            opacity: 0.6;
+        }
+        .prediction-item .right-col {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+        .odds-pill {
+            background: var(--pink);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+        .status-won {
+            color: var(--green);
+            border: 1px solid var(--green);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.6rem;
+            font-weight: 800;
+        }
+        .status-lost {
+            color: var(--red);
+            border: 1px solid var(--red);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.6rem;
+            font-weight: 800;
+        }
+        .status-pending {
+            color: #888;
+            border: 1px solid #555;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.6rem;
+            font-weight: 800;
+        }
+
+        /* ─── DAY BUTTONS ─── */
+        .day-btn {
+            background: #1a1e3a;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            transition: 0.3s;
+        }
+        .day-btn.active {
+            background: var(--green);
+            color: #000;
+            font-weight: 700;
+        }
+        .day-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* ─── BUTTONS ─── */
+        .btn-action {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+        .btn-action:active {
+            transform: scale(0.97);
+        }
+        .btn-pink {
+            background: var(--pink);
+            color: #fff;
+        }
+        .btn-pink:hover {
+            box-shadow: 0 0 20px rgba(255, 102, 192, 0.3);
+        }
+        .btn-green {
+            background: var(--green);
+            color: #000;
+        }
+        .btn-green:hover {
+            box-shadow: 0 0 20px rgba(0, 230, 118, 0.3);
+        }
+        .btn-gold {
+            background: var(--gold);
+            color: #000;
+        }
+        .btn-gold:hover {
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+        .btn-danger {
+            background: var(--red);
+            color: #fff;
+        }
+        .btn-danger:hover {
+            box-shadow: 0 0 20px rgba(255, 61, 61, 0.3);
+        }
+        .btn-telegram {
+            background: var(--telegram);
+            color: #fff;
+        }
+        .btn-telegram:hover {
+            box-shadow: 0 0 20px rgba(0, 136, 204, 0.4);
+            transform: scale(1.02);
+        }
+        .btn-orange {
+            background: var(--orange);
+            color: #fff;
+        }
+        .btn-orange:hover {
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.4);
+        }
+
+        /* ─── PRICING CARDS ─── */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .pricing-card {
+            background: #070918;
+            padding: 16px 12px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid #2d345e;
+            transition: 0.3s;
+        }
+        .pricing-card.featured {
+            border: 2px solid var(--gold);
+            background: #0d1022;
+            transform: scale(1.02);
+        }
+        .pricing-card .plan-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+        .pricing-card .plan-price {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--gold);
+            margin: 6px 0;
+        }
+        .pricing-card .plan-currency {
+            font-size: 0.7rem;
+            opacity: 0.5;
+            display: block;
+        }
+        .pricing-card .plan-desc {
+            font-size: 0.7rem;
+            opacity: 0.6;
+        }
+        .pricing-card .plan-cta {
+            display: inline-block;
+            margin-top: 8px;
+            background: var(--gold);
+            color: #000;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .pricing-card .plan-cta:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        /* ─── TELEGRAM MESSAGE BUTTON ─── */
+        .telegram-contact {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #0088cc, #006699);
+            padding: 14px 24px;
+            border-radius: 50px;
+            border: none;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 20px rgba(0, 136, 204, 0.3);
+            text-decoration: none;
+            width: fit-content;
+            margin: 10px auto;
+        }
+        .telegram-contact:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 30px rgba(0, 136, 204, 0.5);
+        }
+        .telegram-contact svg {
+            width: 28px;
+            height: 28px;
+            fill: #fff;
+        }
+        .telegram-contact .label {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1.2;
+        }
+        .telegram-contact .label small {
+            font-weight: 400;
+            opacity: 0.8;
+            font-size: 0.7rem;
+        }
+
+        /* ─── ADMIN PANEL ─── */
+        .admin-panel {
+            background: #05060f;
+            border: 2px solid var(--pink);
+            border-radius: 24px;
+            padding: 25px;
+            display: none;
+            margin: 20px 0;
+        }
+        .admin-panel input,
+        .admin-panel textarea,
+        .admin-panel select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            background: #1a1e3a;
+            border: 1px solid #2d345e;
+            color: #fff;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+        }
+        .admin-panel textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .admin-panel input:focus,
+        .admin-panel textarea:focus,
+        .admin-panel select:focus {
+            outline: 2px solid var(--pink);
+            border-color: transparent;
+        }
+
+        .adm-section {
+            background: #0d1022;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid #1e2548;
+        }
+        .adm-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+        .adm-section-header h3 {
+            color: var(--gold);
+            font-size: 0.95rem;
+        }
+        .adm-section-header .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+            color: #888;
+        }
+        .adm-section-header .toggle-icon.open {
+            transform: rotate(180deg);
+        }
+        .adm-section-body {
+            padding-top: 12px;
+            display: none;
+        }
+        .adm-section-body.open {
+            display: block;
+        }
+
+        .adm-p-row {
+            background: #111;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #333;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
+        .adm-p-row input,
+        .adm-p-row select {
+            flex: 1;
+            min-width: 80px;
+            padding: 8px 10px;
+            background: #1a1e3a;
+            border: 1px solid #2d345e;
+            color: #fff;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+        .adm-p-row input:focus,
+        .adm-p-row select:focus {
+            outline: 2px solid var(--pink);
+        }
+        .adm-p-row .adm-time-input {
+            max-width: 80px;
+        }
+        .adm-p-row .adm-delete-btn {
+            background: var(--red);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.7rem;
+        }
+        .adm-p-row .adm-delete-btn:hover {
+            opacity: 0.8;
+        }
+
+        .adm-proof-row {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 6px;
+            align-items: center;
+        }
+        .adm-proof-row input {
+            flex: 1;
+            padding: 8px 10px;
+            background: #1a1e3a;
+            border: 1px solid #2d345e;
+            color: #fff;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+        .adm-proof-row .adm-proof-delete {
+            background: var(--red);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.7rem;
+        }
+
+        .adm-faq-row {
+            background: #111;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #333;
+        }
+        .adm-faq-row input,
+        .adm-faq-row textarea {
+            width: 100%;
+            padding: 8px 10px;
+            background: #1a1e3a;
+            border: 1px solid #2d345e;
+            color: #fff;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            margin-bottom: 4px;
+        }
+        .adm-faq-row textarea {
+            min-height: 50px;
+        }
+        .adm-faq-row .adm-faq-delete {
+            background: var(--red);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 4px 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.7rem;
+        }
+
+        /* ─── COUNTRY PRICING ADMIN ─── */
+        .adm-country-row {
+            background: #111;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #333;
+        }
+        .adm-country-row .country-fields {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 6px;
+        }
+        .adm-country-row input,
+        .adm-country-row select {
+            padding: 8px 10px;
+            background: #1a1e3a;
+            border: 1px solid #2d345e;
+            color: #fff;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            width: 100%;
+        }
+        .adm-country-row .country-delete {
+            background: var(--red);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.7rem;
+            margin-top: 6px;
+        }
+        .adm-country-row .country-delete:hover {
+            opacity: 0.8;
+        }
+
+        /* ─── TOAST SYSTEM ─── */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 360px;
+            width: 100%;
+            pointer-events: none;
+        }
+        .toast {
+            pointer-events: auto;
+            background: var(--toast-bg);
+            border-radius: 14px;
+            padding: 14px 20px;
+            border-left: 5px solid var(--green);
+            box-shadow: var(--shadow);
+            transform: translateX(120%);
+            opacity: 0;
+            animation: toastSlide 0.4s forwards;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .toast.success {
+            border-left-color: var(--green);
+        }
+        .toast.error {
+            border-left-color: var(--red);
+        }
+        .toast.info {
+            border-left-color: var(--gold);
+        }
+        .toast .toast-icon {
+            font-size: 1.4rem;
+        }
+        .toast .toast-close {
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-left: auto;
+            padding: 0 4px;
+        }
+        .toast .toast-close:hover {
+            color: #fff;
+        }
+
+        @keyframes toastSlide {
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes toastFadeOut {
+            to {
+                opacity: 0;
+                transform: translateX(120%);
+            }
+        }
+
+        /* ─── LOADING OVERLAY ─── */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 12, 26, 0.75);
+            backdrop-filter: blur(6px);
+            z-index: 99998;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .loading-overlay.show {
+            display: flex;
+        }
+        .spinner {
+            width: 52px;
+            height: 52px;
+            border: 5px solid #1e2548;
+            border-top-color: var(--pink);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .loading-text {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            letter-spacing: 1px;
+        }
+
+        /* ─── PROOF GALLERY ─── */
+        .proof-img {
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid #1e2548;
+            transition: transform 0.3s, border 0.3s;
+            object-fit: cover;
+            aspect-ratio: 16/9;
+            background: #0a0c1a;
+        }
+        .proof-img:hover {
+            transform: scale(1.02);
+            border-color: var(--pink);
+        }
+
+        /* ─── FAQ ─── */
+        .faq-item {
+            border-bottom: 1px solid #222;
+            padding: 15px 0;
+            cursor: pointer;
+        }
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        .faq-item .faq-q {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+        .faq-item .faq-q .faq-arrow {
+            transition: transform 0.3s;
+            color: #888;
+        }
+        .faq-item .faq-q .faq-arrow.open {
+            transform: rotate(180deg);
+        }
+        .faq-ans {
+            display: none;
+            padding-top: 10px;
+            color: #aaa;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+        .faq-ans.show {
+            display: block;
+        }
+
+        /* ─── LAST UPDATED ─── */
+        .last-updated {
+            font-size: 0.7rem;
+            opacity: 0.4;
+            text-align: right;
+            margin-top: 8px;
+            letter-spacing: 0.3px;
+        }
+
+        /* ─── VIP / DAILY / SPECIAL UNLOCKED CONTENT ─── */
+        #vip-html-content,
+        #daily-html-content {
+            padding: 6px 0;
+        }
+        #vip-html-content .prediction-item,
+        #daily-html-content .prediction-item,
+        .sub-tab-content .prediction-item {
+            border-left-color: var(--gold);
+        }
+        .sub-tab-content .prediction-item {
+            border-left-color: var(--orange);
+        }
+
+        /* ─── FLOATING ADMIN TRIGGER ─── */
+        .floating-admin-trigger {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            background: var(--pink);
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 9999;
+            box-shadow: 0 0 20px rgba(255, 102, 192, 0.4);
+            font-size: 1.5rem;
+            border: none;
+            color: #fff;
+            transition: 0.3s;
+        }
+        .floating-admin-trigger:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 30px rgba(255, 102, 192, 0.6);
+        }
+
+        /* ─── FLOATING TELEGRAM BUTTON ─── */
+        .floating-telegram {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: var(--telegram);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 9998;
+            box-shadow: 0 0 30px rgba(0, 136, 204, 0.5);
+            border: none;
+            color: #fff;
+            transition: 0.3s;
+            text-decoration: none;
+            font-size: 2rem;
+        }
+        .floating-telegram:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px rgba(0, 136, 204, 0.7);
+        }
+        .floating-telegram .tooltip {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            background: #1a1e3a;
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: 0.3s;
+            pointer-events: none;
+            border: 1px solid #333;
+        }
+        .floating-telegram:hover .tooltip {
+            opacity: 1;
+        }
+
+        /* ─── UTILITY ─── */
+        .hidden {
+            display: none !important;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .mt-10 {
+            margin-top: 10px;
+        }
+        .mb-10 {
+            margin-bottom: 10px;
+        }
+        .gap-6 {
+            gap: 6px;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .text-muted {
+            opacity: 0.6;
+            font-size: 0.8rem;
+        }
+        .mt-20 {
+            margin-top: 20px;
+        }
+        .flex-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 768px) {
+            .header {
+                padding: 10px 14px;
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .logo {
+                font-size: 1.2rem;
+                text-align: center;
+            }
+            .header-center {
+                justify-content: center;
+            }
+            .country-selector {
+                padding: 4px 10px 4px 14px;
+                font-size: 0.7rem;
+            }
+            .country-selector select {
+                font-size: 0.7rem;
+                max-width: 120px;
+            }
+            nav {
+                justify-content: center;
+            }
+            nav a {
+                margin-left: 4px;
+                font-size: 0.7rem;
+                padding: 4px 8px;
+            }
+            .container {
+                padding: 12px;
+            }
+            .section-card {
+                padding: 14px;
+            }
+            .prediction-item {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 6px;
+            }
+            .prediction-item .right-col {
+                text-align: left;
+                align-items: flex-start;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+            .adm-p-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .adm-p-row input,
+            .adm-p-row select {
+                min-width: unset;
+            }
+            .adm-p-row .adm-time-input {
+                max-width: unset;
+            }
+            .toast-container {
+                bottom: 16px;
+                right: 16px;
+                left: 16px;
+                max-width: unset;
+            }
+            #proofs-display {
+                grid-template-columns: 1fr !important;
+            }
+            .floating-admin-trigger {
+                width: 44px;
+                height: 44px;
+                font-size: 1.2rem;
+                bottom: 16px;
+                left: 16px;
+            }
+            .floating-telegram {
+                width: 50px;
+                height: 50px;
+                font-size: 1.6rem;
+                bottom: 16px;
+                right: 16px;
+            }
+            .telegram-contact {
+                padding: 10px 16px;
+                font-size: 0.85rem;
+                width: 100%;
+                justify-content: center;
+            }
+            .telegram-contact .label small {
+                font-size: 0.6rem;
+            }
+            .pricing-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .pricing-card.featured {
+                transform: none;
+                grid-column: 1 / -1;
+            }
+            .adm-country-row .country-fields {
+                grid-template-columns: 1fr 1fr;
+            }
+            .sub-tabs {
+                justify-content: center;
+            }
+            .sub-tab-btn {
+                font-size: 0.7rem;
+                padding: 6px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section-title {
+                font-size: 1rem;
+            }
+            .day-btn {
+                font-size: 0.65rem;
+                padding: 6px 10px;
+            }
+            .btn-action {
+                font-size: 0.85rem;
+                padding: 12px;
+            }
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            .adm-country-row .country-fields {
+                grid-template-columns: 1fr;
+            }
+            .country-selector select {
+                max-width: 90px;
+                font-size: 0.65rem;
+            }
+            .sub-tab-btn {
+                font-size: 0.65rem;
+                padding: 4px 10px;
+            }
+        }
+    </style>
+</head>
+<body class="dark">
+
+    <!-- ─── LOADING OVERLAY ─── -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Loading data…</div>
+    </div>
+
+    <!-- ─── TOAST CONTAINER ─── -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- ─── HEADER ─── -->
+    <div class="header">
+        <div class="logo" id="logoTrigger">SOCCEREX</div>
+        <div class="header-center">
+            <div class="country-selector">
+                <span class="flag" id="selectedFlag">🇰🇪</span>
+                <select id="countrySelect" onchange="window.changeCountry(this.value)">
+                    <!-- populated by JavaScript -->
+                </select>
+            </div>
+        </div>
+        <nav>
+            <a onclick="showTab('home')">HOME</a>
+            <a onclick="showTab('vip')">VIP ZONE</a>
+            <a onclick="showTab('daily')">DAILY SURE</a>
+            <a onclick="showTab('special')" class="special-link">🎯 SPECIAL</a>
+        </nav>
+    </div>
+
+    <!-- ─── MAIN CONTAINER ─── -->
+    <div class="container">
+
+        <!-- TAB: HOME -->
+        <div id="tab-home" class="tab-content">
+            <div class="section-card" style="text-align: center;">
+                <div id="display-accuracy" style="font-size: 2.5rem; font-weight: 800; color: var(--green);">--%</div>
+                <div style="font-size: 0.8rem; opacity: 0.6; letter-spacing: 1px;">MONTHLY AI ACCURACY</div>
+                <div id="lastUpdatedDisplay" class="last-updated" style="margin-top:6px;">Last updated: —</div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">⚽ FREE PREDICTIONS</div>
+                <div id="day-selector" style="margin-bottom: 20px;"></div>
+                <div id="free-picks-list">Loading real-time data…</div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">🏆 RECENT WINNING TICKETS</div>
+                <div id="proofs-display" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;"></div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-title">❓ FREQUENTLY ASKED</div>
+                <div id="faq-display"></div>
+            </div>
+
+            <!-- Telegram Contact Button -->
+            <div class="section-card" style="background: linear-gradient(135deg, #0d1a2b, #0a0c1a); border-color: var(--telegram);">
+                <div class="section-title" style="color: var(--telegram);">📨 CONTACT ADMIN</div>
+                <p style="opacity:0.7; font-size:0.9rem; margin-bottom:16px; text-align:center;">
+                    Have a question, feedback, or need help? Send a message directly to the admin on Telegram.
+                </p>
+                <a href="https://t.me/Angelpet09" target="_blank" class="telegram-contact" style="margin:0 auto;">
+                    <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                    <span class="label">
+                        Message Admin
+                        <small>@Angelpet09 · Telegram</small>
+                    </span>
+                </a>
+            </div>
+        </div>
+
+        <!-- TAB: VIP -->
+        <div id="tab-vip" class="tab-content hidden">
+            <div class="section-card">
+                <div class="section-title">💎 VIP ACCESS</div>
+
+                <!-- VIP PRICING SECTION (dynamic) -->
+                <div style="background: #0d1022; border-radius: 16px; padding: 16px; margin-bottom: 20px; border: 1px solid var(--gold);">
+                    <div style="text-align: center; font-weight: 600; font-size: 0.9rem; color: var(--gold); margin-bottom: 12px;">
+                        💰 VIP SUBSCRIPTION PLANS
+                        <span id="vipCountryLabel" style="font-weight:400;font-size:0.7rem;opacity:0.6;display:block;">🇰🇪 Kenya</span>
+                    </div>
+                    <div class="pricing-grid" id="vip-pricing-grid">
+                        <!-- populated by JavaScript -->
+                    </div>
+                    <div style="text-align: center; font-size: 0.75rem; opacity: 0.6; margin-top: 6px;">
+                        💬 Click "Buy Now" to message admin on Telegram for payment &amp; activation
+                    </div>
+                </div>
+
+                <div id="vip-locked">
+                    <input type="password" id="vip-entry-code" placeholder="Enter VIP Code" style="width:100%;padding:15px;border-radius:12px;background:#070918;border:1px solid var(--pink);color:#fff;text-align:center;" />
+                    <button class="btn-action btn-pink" onclick="window.unlockAccess('vip')">UNLOCK VIP PICKS</button>
+                </div>
+                <div id="vip-unlocked" class="hidden">
+                    <div id="vip-html-content"></div>
+                    <div style="margin-top:20px; text-align:center; padding-top:16px; border-top:1px solid #1e2548;">
+                        <a href="https://t.me/Angelpet09" target="_blank" class="telegram-contact" style="margin:0 auto; padding:10px 20px; font-size:0.9rem;">
+                            <svg viewBox="0 0 24 24" style="width:22px;height:22px;"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                            <span class="label">Message Admin <small>@Angelpet09</small></span>
+                        </a>
+                    </div>
+                    <button onclick="window.clearSession()" style="background:none;border:none;color:var(--red);cursor:pointer;margin-top:20px;display:block;width:100%;">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: DAILY -->
+        <div id="tab-daily" class="tab-content hidden">
+            <div class="section-card">
+                <div class="section-title">📅 DAILY SURE PICKS</div>
+
+                <!-- DAILY PRICING SECTION (dynamic) -->
+                <div style="background: #0d1022; border-radius: 16px; padding: 16px; margin-bottom: 20px; border: 1px solid var(--gold);">
+                    <div style="text-align: center; font-weight: 600; font-size: 0.9rem; color: var(--gold); margin-bottom: 12px;">
+                        💰 DAILY SURE PLAN
+                        <span id="dailyCountryLabel" style="font-weight:400;font-size:0.7rem;opacity:0.6;display:block;">🇰🇪 Kenya</span>
+                    </div>
+                    <div class="pricing-grid" style="grid-template-columns: 1fr; max-width: 300px; margin: 0 auto;" id="daily-pricing-card">
+                        <!-- populated by JavaScript -->
+                    </div>
+                    <div style="text-align: center; font-size: 0.75rem; opacity: 0.6; margin-top: 6px;">
+                        💬 Click "Buy Now" to message admin on Telegram for payment &amp; activation
+                    </div>
+                </div>
+
+                <div id="daily-locked">
+                    <input type="password" id="daily-entry-code" placeholder="Enter Daily Code" style="width:100%;padding:15px;border-radius:12px;background:#070918;border:1px solid var(--green);color:#fff;text-align:center;" />
+                    <button class="btn-action btn-green" onclick="window.unlockAccess('daily')">UNLOCK DAILY PICKS</button>
+                </div>
+                <div id="daily-unlocked" class="hidden">
+                    <div id="daily-html-content"></div>
+                    <div style="margin-top:20px; text-align:center; padding-top:16px; border-top:1px solid #1e2548;">
+                        <a href="https://t.me/Angelpet09" target="_blank" class="telegram-contact" style="margin:0 auto; padding:10px 20px; font-size:0.9rem;">
+                            <svg viewBox="0 0 24 24" style="width:22px;height:22px;"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                            <span class="label">Message Admin <small>@Angelpet09</small></span>
+                        </a>
+                    </div>
+                    <button onclick="window.clearSession()" style="background:none;border:none;color:var(--red);cursor:pointer;margin-top:20px;display:block;width:100%;">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── SPECIAL TAB with Sub-Tabs ─── -->
+        <div id="tab-special" class="tab-content hidden">
+            <div class="section-card">
+                <div class="section-title special-title">🎯 SPECIAL PICKS</div>
+
+                <!-- Sub-tabs: Correct Score, Draws, Over -->
+                <div id="special-locked">
+                    <p style="opacity:0.7; font-size:0.85rem; margin-bottom:12px; text-align:center;">
+                        Enter the special access code to view all special picks.
+                    </p>
+                    <input type="password" id="special-entry-code" placeholder="Enter Special Code" style="width:100%;padding:15px;border-radius:12px;background:#070918;border:1px solid var(--orange);color:#fff;text-align:center;" />
+                    <button class="btn-action btn-orange" onclick="window.unlockAccess('special')">UNLOCK SPECIAL PICKS</button>
+                </div>
+                <div id="special-unlocked" class="hidden">
+                    <!-- Sub-tab buttons -->
+                    <div class="sub-tabs" id="specialSubTabs">
+                        <button class="sub-tab-btn active" data-sub="correctscore">CORRECT SCORE</button>
+                        <button class="sub-tab-btn" data-sub="draws">DRAWS</button>
+                        <button class="sub-tab-btn" data-sub="over">OVER</button>
+                    </div>
+                    <!-- Sub-tab content containers -->
+                    <div id="sub-correctscore" class="sub-tab-content active"></div>
+                    <div id="sub-draws" class="sub-tab-content"></div>
+                    <div id="sub-over" class="sub-tab-content"></div>
+
+                    <div style="margin-top:20px; text-align:center; padding-top:16px; border-top:1px solid #1e2548;">
+                        <a href="https://t.me/Angelpet09" target="_blank" class="telegram-contact" style="margin:0 auto; padding:10px 20px; font-size:0.9rem;">
+                            <svg viewBox="0 0 24 24" style="width:22px;height:22px;"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                            <span class="label">Message Admin <small>@Angelpet09</small></span>
+                        </a>
+                    </div>
+                    <button onclick="window.clearSession()" style="background:none;border:none;color:var(--red);cursor:pointer;margin-top:20px;display:block;width:100%;">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── FLOATING ADMIN TRIGGER ─── -->
+    <button id="adminTrigger" class="floating-admin-trigger">👑</button>
+
+    <!-- ─── FLOATING TELEGRAM BUTTON ─── -->
+    <a href="https://t.me/Angelpet09" target="_blank" class="floating-telegram" id="telegramFloat" title="Message Admin on Telegram">
+        📨
+        <span class="tooltip">Chat with Admin</span>
+    </a>
+
+    <!-- ─── ADMIN CONSOLE ─── -->
+    <div class="container">
+        <div id="adminPanel" class="admin-panel">
+            <div class="flex-between">
+                <h2 style="color:var(--pink)">👑 ADMIN MASTER CONSOLE</h2>
+                <span style="font-size:0.7rem;opacity:0.5;">Ctrl+Shift+A</span>
+            </div>
+            <div id="admin-auth-status" style="font-size:10px; margin:10px 0;">Checking Auth…</div>
+
+            <!-- Global Settings (extended with three special HTML fields) -->
+            <div class="adm-section">
+                <div class="adm-section-header" onclick="window.toggleAdmSection(this)">
+                    <h3>⚙️ Global Settings & Prices</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="adm-section-body open">
+                    <input id="adm-accuracy" placeholder="Accuracy Display (e.g. 89.4%)" />
+
+                    <label style="display:block; margin-top:10px; font-size:0.8rem; opacity:0.7;">VIP Weekly Price (KES)</label>
+                    <input id="adm-vip-weekly" placeholder="e.g. 5000" />
+
+                    <label style="display:block; margin-top:6px; font-size:0.8rem; opacity:0.7;">VIP Monthly Price (KES)</label>
+                    <input id="adm-vip-monthly" placeholder="e.g. 25000" />
+
+                    <label style="display:block; margin-top:6px; font-size:0.8rem; opacity:0.7;">VIP Quarterly Price (KES)</label>
+                    <input id="adm-vip-quarterly" placeholder="e.g. 70000" />
+
+                    <label style="display:block; margin-top:6px; font-size:0.8rem; opacity:0.7;">Daily Sure Price (KES)</label>
+                    <input id="adm-daily-price" placeholder="e.g. 3000" />
+
+                    <textarea id="adm-vip-html" placeholder="VIP Zone HTML (Add picks here)" rows="4"></textarea>
+                    <textarea id="adm-daily-html" placeholder="Daily Zone HTML" rows="4"></textarea>
+
+                    <!-- NEW: Three special HTML fields -->
+                    <label style="display:block; margin-top:10px; font-size:0.8rem; opacity:0.7; color:var(--orange);">🎯 Correct Score HTML</label>
+                    <textarea id="adm-special-correct" placeholder="Correct Score predictions" rows="4"></textarea>
+
+                    <label style="display:block; margin-top:6px; font-size:0.8rem; opacity:0.7; color:var(--orange);">🎯 Draws HTML</label>
+                    <textarea id="adm-special-draws" placeholder="Draws predictions" rows="4"></textarea>
+
+                    <label style="display:block; margin-top:6px; font-size:0.8rem; opacity:0.7; color:var(--orange);">🎯 Over HTML</label>
+                    <textarea id="adm-special-over" placeholder="Over/Under predictions" rows="4"></textarea>
+
+                    <button class="btn-green btn-action" onclick="window.saveGlobalSettings()">💾 Save Settings & Prices</button>
+                </div>
+            </div>
+
+            <!-- Access Codes (with special) -->
+            <div class="adm-section">
+                <div class="adm-section-header" onclick="window.toggleAdmSection(this)">
+                    <h3>🔐 Secret Codes</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="adm-section-body open">
+                    <input id="adm-vip-code" placeholder="New VIP Access Code" />
+                    <input id="adm-daily-code" placeholder="New Daily Access Code" />
+                    <input id="adm-special-code" placeholder="New Special Access Code" style="border-color:var(--orange);" />
+                    <button class="btn-pink btn-action" onclick="window.saveNewCodes()">🔑 Update All Codes</button>
+                </div>
+            </div>
+
+            <!-- Country Pricing Manager -->
+            <div class="adm-section">
+                <div class="adm-section-header" onclick="window.toggleAdmSection(this)">
+                    <h3>🌍 Country Pricing Manager</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="adm-section-body open">
+                    <p style="opacity:0.7;font-size:0.8rem;margin-bottom:10px;">
+                        Add countries and set their prices. Users will see prices based on their selected country.
+                    </p>
+                    <div id="adm-countries-area"></div>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;">
+                        <button class="btn-pink btn-action" style="padding:10px;flex:1;" onclick="window.addCountryRow()">➕ Add Country</button>
+                        <button class="btn-danger btn-action" style="padding:10px;flex:1;" onclick="window.clearAllCountryRows()">🗑️ Clear All</button>
+                    </div>
+                    <button class="btn-green btn-action" onclick="window.saveAllCountries()">📤 Save Country Prices</button>
+                </div>
+            </div>
+
+            <!-- Free Predictions -->
+            <div class="adm-section">
+                <div class="adm-section-header" onclick="window.toggleAdmSection(this)">
+                    <h3>📋 Free Predictions</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="adm-section-body open">
+                    <div class="flex-between mb-10">
+                        <input id="adm-pick-search" placeholder="🔍 Search matches…" style="flex:1;padding:8px 12px;background:#1a1e3a;border:1px solid #2d345e;color:#fff;border-radius:8px;" />
+                        <button onclick="window.filterPickRows()" style="background:var(--pink);color:#fff;border:none;border-radius:8px;padding:8px 16px;cursor:pointer;">Filter</button>
+                        <button onclick="document.getElementById('adm-pick-search').value='';window.filterPickRows();" style="background:#333;color:#fff;border:none;border-radius:8px;padding:8px 12px;cursor:pointer;">✕</button>
+                    </div>
+                    <div id="adm-picks-area"></div>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;">
+                        <button class="btn-pink btn-action" style="padding:10px;flex:1;" onclick="window.addPickRow()">➕ Add Prediction Row</button>
+                        <button class="btn-danger btn-action" style="padding:10px;flex:1;" onclick="window.clearAllPickRows()">🗑️ Clear All</button>
+                    </div>
+                    <button class="btn-green btn-action" onclick="window.saveAllPicks()">📤 Publish All Picks</button>
+                </div>
+            </div>
+
+            <!-- Winning Proofs -->
+            <div class="adm-section">
+                <div class="adm-section-header" onclick="window.toggleAdmSection(this)">
+                    <h3>🖼️ Winning Proofs</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="adm-section-body open">
+                    <div id="adm-proofs-area"></div>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;">
+                        <button class="btn-pink btn-action" style="padding:10px;flex:1;" onclick="window.addProofRow()">➕ Add Image URL</button>
+                        <button class="btn-danger btn-action" style="padding:10px;flex:1;" onclick="window.clearAllProofRows()">🗑️ Clear All</button>
+                    </div>
+                    <button class="btn-green btn-action" onclick="window.saveAllProofs()">📤 Update Gallery</button>
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div class="adm-section">
+                <div class="adm-section-header" onclick="window.toggleAdmSection(this)">
+                    <h3>❓ FAQ Editor</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="adm-section-body open">
+                    <div id="adm-faq-area"></div>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;">
+                        <button class="btn-pink btn-action" style="padding:10px;flex:1;" onclick="window.addFaqRow()">➕ Add FAQ</button>
+                        <button class="btn-danger btn-action" style="padding:10px;flex:1;" onclick="window.clearAllFaqRows()">🗑️ Clear All</button>
+                    </div>
+                    <button class="btn-green btn-action" onclick="window.saveAllFaq()">📤 Save FAQ</button>
+                </div>
+            </div>
+
+            <!-- Telegram Admin -->
+            <div class="adm-section">
+                <div class="adm-section-header" onclick="window.toggleAdmSection(this)">
+                    <h3>📨 Telegram Contact</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="adm-section-body open">
+                    <p style="opacity:0.7;font-size:0.85rem;margin-bottom:10px;">
+                        Your Telegram username is displayed on all contact buttons. Users can message you directly.
+                    </p>
+                    <div style="background:#0d1022;border-radius:12px;padding:16px;border:1px solid #1e2548;">
+                        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                            <span style="font-weight:600;color:var(--telegram);">@Angelpet09</span>
+                            <span style="opacity:0.5;font-size:0.8rem;">(configured in code)</span>
+                        </div>
+                        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+                            <a href="https://t.me/Angelpet09" target="_blank" class="btn-telegram btn-action" style="padding:10px 20px;width:auto;margin:0;text-decoration:none;text-align:center;">📨 Open Telegram Chat</a>
+                            <button onclick="navigator.clipboard.writeText('@Angelpet09').then(()=>window.showToast('Username copied!','success'))" style="background:#1a1e3a;color:#fff;border:1px solid #333;padding:10px 20px;border-radius:12px;cursor:pointer;font-weight:600;font-size:0.85rem;">📋 Copy Username</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tools -->
+            <div class="adm-section">
+                <div class="adm-section-header" onclick="window.toggleAdmSection(this)">
+                    <h3>🔄 Tools</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="adm-section-body open">
+                    <button class="btn-gold btn-action" onclick="window.forceRefresh()">🔄 Force Refresh Data</button>
+                    <button class="btn-danger btn-action" onclick="window.clearAllData()" style="margin-top:6px;">⚠️ Reset All Data (Danger)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── FIREBASE IMPORTS & APP ─── -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+        import { getDatabase, ref, onValue, set, update, get } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAyYOW_TsOEjtiTqm1RXIl0P-30K0qaSlc",
+            authDomain: "soccerex-58644.firebaseapp.com",
+            databaseURL: "https://soccerex-58644-default-rtdb.firebaseio.com",
+            projectId: "soccerex-58644",
+            storageBucket: "soccerex-58644.firebasestorage.app",
+            messagingSenderId: "724249492954",
+            appId: "1:724249492954:web:7d3a0aa2385b30a2f114e3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
+
+        // ─── GLOBALS ───
+        let appData = { picks: [], proofs: [], settings: {} };
+        let curDay = new Date().getDay();
+        const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        let activeSpecialSub = localStorage.getItem('soccerex_special_sub') || 'correctscore';
+
+        // ─── COUNTRY DATA ───
+        const defaultCountries = {
+            'KE': { code: 'KE', name: 'Kenya', flag: '🇰🇪', currency: 'KES', vipWeekly: 5000, vipMonthly: 25000, vipQuarterly: 70000, daily: 3000 },
+            'NG': { code: 'NG', name: 'Nigeria', flag: '🇳🇬', currency: 'NGN', vipWeekly: 55000, vipMonthly: 275000, vipQuarterly: 770000, daily: 33000 },
+            'ZA': { code: 'ZA', name: 'South Africa', flag: '🇿🇦', currency: 'ZAR', vipWeekly: 850, vipMonthly: 4250, vipQuarterly: 11900, daily: 510 },
+            'GH': { code: 'GH', name: 'Ghana', flag: '🇬🇭', currency: 'GHS', vipWeekly: 450, vipMonthly: 2250, vipQuarterly: 6300, daily: 270 },
+            'UG': { code: 'UG', name: 'Uganda', flag: '🇺🇬', currency: 'UGX', vipWeekly: 185000, vipMonthly: 925000, vipQuarterly: 2590000, daily: 111000 },
+            'TZ': { code: 'TZ', name: 'Tanzania', flag: '🇹🇿', currency: 'TZS', vipWeekly: 115000, vipMonthly: 575000, vipQuarterly: 1610000, daily: 69000 },
+            'RW': { code: 'RW', name: 'Rwanda', flag: '🇷🇼', currency: 'RWF', vipWeekly: 6500, vipMonthly: 32500, vipQuarterly: 91000, daily: 3900 },
+            'ET': { code: 'ET', name: 'Ethiopia', flag: '🇪🇹', currency: 'ETB', vipWeekly: 4200, vipMonthly: 21000, vipQuarterly: 58800, daily: 2520 },
+            'ZM': { code: 'ZM', name: 'Zambia', flag: '🇿🇲', currency: 'ZMW', vipWeekly: 1800, vipMonthly: 9000, vipQuarterly: 25200, daily: 1080 },
+            'MW': { code: 'MW', name: 'Malawi', flag: '🇲🇼', currency: 'MWK', vipWeekly: 87000, vipMonthly: 435000, vipQuarterly: 1218000, daily: 52200 },
+            'SL': { code: 'SL', name: 'Sierra Leone', flag: '🇸🇱', currency: 'SLL', vipWeekly: 1900000, vipMonthly: 9500000, vipQuarterly: 26600000, daily: 1140000 },
+            'LR': { code: 'LR', name: 'Liberia', flag: '🇱🇷', currency: 'LRD', vipWeekly: 1500, vipMonthly: 7500, vipQuarterly: 21000, daily: 900 },
+            'GM': { code: 'GM', name: 'Gambia', flag: '🇬🇲', currency: 'GMD', vipWeekly: 4800, vipMonthly: 24000, vipQuarterly: 67200, daily: 2880 },
+            'BI': { code: 'BI', name: 'Burundi', flag: '🇧🇮', currency: 'BIF', vipWeekly: 28500, vipMonthly: 142500, vipQuarterly: 399000, daily: 17100 },
+            'CD': { code: 'CD', name: 'DR Congo', flag: '🇨🇩', currency: 'CDF', vipWeekly: 28000, vipMonthly: 140000, vipQuarterly: 392000, daily: 16800 },
+            'US': { code: 'US', name: 'United States', flag: '🇺🇸', currency: 'USD', vipWeekly: 50, vipMonthly: 250, vipQuarterly: 700, daily: 30 },
+            'GB': { code: 'GB', name: 'United Kingdom', flag: '🇬🇧', currency: 'GBP', vipWeekly: 40, vipMonthly: 200, vipQuarterly: 560, daily: 24 },
+            'EU': { code: 'EU', name: 'Europe (Euro)', flag: '🇪🇺', currency: 'EUR', vipWeekly: 45, vipMonthly: 225, vipQuarterly: 630, daily: 27 },
+            'AE': { code: 'AE', name: 'UAE', flag: '🇦🇪', currency: 'AED', vipWeekly: 180, vipMonthly: 900, vipQuarterly: 2520, daily: 108 },
+            'SA': { code: 'SA', name: 'Saudi Arabia', flag: '🇸🇦', currency: 'SAR', vipWeekly: 190, vipMonthly: 950, vipQuarterly: 2660, daily: 114 },
+            'IN': { code: 'IN', name: 'India', flag: '🇮🇳', currency: 'INR', vipWeekly: 4200, vipMonthly: 21000, vipQuarterly: 58800, daily: 2520 },
+        };
+
+        let selectedCountry = 'KE';
+        let countryPrices = {};
+
+        // ─── TOAST SYSTEM ───
+        window.showToast = (message, type = 'info', duration = 4000) => {
+            const container = document.getElementById('toastContainer');
+            const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+            <span class="toast-icon">${icons[type] || 'ℹ️'}</span>
+            <span style="flex:1;">${message}</span>
+            <button class="toast-close">&times;</button>
+          `;
+            container.appendChild(toast);
+            const close = toast.querySelector('.toast-close');
+            close.addEventListener('click', () => {
+                toast.style.animation = 'toastFadeOut 0.3s forwards';
+                setTimeout(() => toast.remove(), 300);
+            });
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.style.animation = 'toastFadeOut 0.3s forwards';
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }, duration);
+        };
+
+        // ─── LOADING ───
+        let loadingCounter = 0;
+        window.showLoading = (show = true) => {
+            const overlay = document.getElementById('loadingOverlay');
+            if (show) {
+                loadingCounter++;
+                overlay.classList.add('show');
+            } else {
+                loadingCounter--;
+                if (loadingCounter <= 0) {
+                    loadingCounter = 0;
+                    overlay.classList.remove('show');
+                }
+            }
+        };
+
+        // ─── AUTH ───
+        let logoClicks = 0;
+        document.getElementById('logoTrigger').onclick = () => {
+            logoClicks++;
+            if (logoClicks === 5) {
+                window.adminAuthPrompt();
+                logoClicks = 0;
+            }
+            window.showTab('home');
+        };
+
+        onAuthStateChanged(auth, (u) => {
+            const trigger = document.getElementById('adminTrigger');
+            const status = document.getElementById('admin-auth-status');
+            if (u) {
+                trigger.style.display = 'flex';
+                status.innerText = "✅ Authorized Access";
+                status.style.color = "var(--green)";
+                window.showToast('Admin authenticated', 'success');
+                setTimeout(() => {
+                    const panel = document.getElementById('adminPanel');
+                    if(panel && panel.style.display !== 'block'){
+                        document.getElementById('adminTrigger').click();
+                    }
+                }, 500);
+            } else {
+                trigger.style.display = 'none';
+                status.innerText = "❌ Not Authorized";
+                status.style.color = "var(--red)";
+            }
+        });
+
+        window.adminAuthPrompt = async () => {
+            const e = prompt("Admin Email:");
+            const p = prompt("Admin Password:");
+            if (e && p) {
+                try {
+                    await signInWithEmailAndPassword(auth, e, p);
+                } catch (err) {
+                    window.showToast('Access Denied: ' + err.message, 'error');
+                }
+            }
+        };
+
+        // ─── DATABASE LISTENER ───
+        let initialLoad = true;
+        onValue(ref(db, '/'), (snap) => {
+            const val = snap.val();
+            if (val) {
+                appData = val;
+                renderAll();
+                if (initialLoad) {
+                    initialLoad = false;
+                    window.showToast('Data loaded successfully', 'success', 2000);
+                }
+            } else {
+                if (initialLoad) {
+                    initialLoad = false;
+                    const defaults = {
+                        picks: [],
+                        proofs: [],
+                        settings: {
+                            accuracy: '88%',
+                            vipHtml: '',
+                            dailyHtml: '',
+                            specialCorrect: '',
+                            specialDraws: '',
+                            specialOver: '',
+                            faq: [],
+                            lastUpdated: new Date().toISOString(),
+                            countryPrices: defaultCountries
+                        },
+                        accessCodes: { vip: 'vip123', daily: 'daily123', special: 'special123' }
+                    };
+                    set(ref(db, '/'), defaults).then(() => {
+                        window.showToast('Database initialized with defaults', 'info');
+                    }).catch(err => {
+                        window.showToast('Error initializing DB: ' + err.message, 'error');
+                    });
+                }
+            }
+        }, (error) => {
+            window.showToast('Firebase error: ' + error.message, 'error');
+        });
+
+        // ─── RENDER ───
+        function renderAll() {
+            const s = appData.settings || {};
+
+            countryPrices = s.countryPrices || defaultCountries;
+            populateCountryDropdown();
+
+            const saved = localStorage.getItem('soccerex_country');
+            if (saved && countryPrices[saved]) {
+                selectedCountry = saved;
+            } else {
+                selectedCountry = 'KE';
+                localStorage.setItem('soccerex_country', 'KE');
+            }
+            updateCountryDisplay();
+
+            document.getElementById('display-accuracy').innerText = s.accuracy || '88%';
+
+            const lu = s.lastUpdated ? new Date(s.lastUpdated) : null;
+            document.getElementById('lastUpdatedDisplay').innerText = lu ?
+                `Last updated: ${lu.toLocaleDateString()} ${lu.toLocaleTimeString()}` :
+                'Last updated: —';
+
+            document.getElementById('day-selector').innerHTML = days.map((d, i) => `
+            <button class="day-btn ${curDay === i ? 'active' : ''}" onclick="window.setDay(${i})">${d.substring(0, 3)}</button>
+          `).join('');
+
+            const filtered = (appData.picks || []).filter(p => parseInt(p.day) === curDay);
+            document.getElementById('free-picks-list').innerHTML = filtered.length ?
+                filtered.map(p => `
+              <div class="prediction-item">
+                <div class="match-info">
+                  <div class="match-name">${escHtml(p.match)}</div>
+                  <div class="match-time">${p.time ? '⏱ ' + escHtml(p.time) : ''}</div>
+                  <div class="pick-detail">${escHtml(p.pick)}</div>
+                </div>
+                <div class="right-col">
+                  <div class="odds-pill">${escHtml(p.odds)}</div>
+                  ${p.status ? `<div class="status-${p.status}">${p.status.toUpperCase()}</div>` : '<div class="status-pending">PENDING</div>'}
+                </div>
+              </div>
+            `).join('') :
+                '<div class="text-muted text-center" style="padding:20px;">No free picks for this day. Check back later!</div>';
+
+            document.getElementById('proofs-display').innerHTML = (appData.proofs || []).length ?
+                (appData.proofs || []).map(p => `
+              <img src="${escHtml(p.url)}" class="proof-img" onerror="this.style.display='none'" />
+            `).join('') :
+                '<div class="text-muted text-center" style="padding:20px;grid-column:1/-1;">No winning tickets uploaded yet.</div>';
+
+            const faqData = s.faq || [];
+            document.getElementById('faq-display').innerHTML = faqData.length ?
+                faqData.map((item, idx) => `
+              <div class="faq-item" onclick="window.toggleFaq(this)">
+                <div class="faq-q">
+                  <span>${escHtml(item.question || 'Q' + (idx + 1))}</span>
+                  <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-ans">${escHtml(item.answer || '—')}</div>
+              </div>
+            `).join('') :
+                '<div class="text-muted text-center" style="padding:12px;">No FAQ entries yet. Add some in the admin panel.</div>';
+
+            // VIP PRICING
+            const country = countryPrices[selectedCountry] || countryPrices['KE'];
+            const c = country || { currency: 'KES', vipWeekly: 5000, vipMonthly: 25000, vipQuarterly: 70000 };
+            document.getElementById('vipCountryLabel').innerHTML = `${c.flag || '🇰🇪'} ${c.name || 'Kenya'}`;
+            const vipGrid = document.getElementById('vip-pricing-grid');
+            vipGrid.innerHTML = `
+            <div class="pricing-card">
+              <div class="plan-name">Weekly</div>
+              <div class="plan-price">${formatPrice(c.vipWeekly || 5000)}</div>
+              <span class="plan-currency">${c.currency || 'KES'}</span>
+              <div class="plan-desc">7 days access</div>
+              <a href="https://t.me/Angelpet09" target="_blank" class="plan-cta">Buy Now</a>
+            </div>
+            <div class="pricing-card featured">
+              <div class="plan-name">Monthly</div>
+              <div class="plan-price">${formatPrice(c.vipMonthly || 25000)}</div>
+              <span class="plan-currency">${c.currency || 'KES'}</span>
+              <div class="plan-desc">Best value • 30 days</div>
+              <a href="https://t.me/Angelpet09" target="_blank" class="plan-cta">Buy Now</a>
+            </div>
+            <div class="pricing-card">
+              <div class="plan-name">Quarterly</div>
+              <div class="plan-price">${formatPrice(c.vipQuarterly || 70000)}</div>
+              <span class="plan-currency">${c.currency || 'KES'}</span>
+              <div class="plan-desc">3 months access</div>
+              <a href="https://t.me/Angelpet09" target="_blank" class="plan-cta">Buy Now</a>
+            </div>
+          `;
+
+            // DAILY PRICING
+            document.getElementById('dailyCountryLabel').innerHTML = `${c.flag || '🇰🇪'} ${c.name || 'Kenya'}`;
+            const dailyCard = document.getElementById('daily-pricing-card');
+            const dailyPrice = c.daily || 3000;
+            dailyCard.innerHTML = `
+            <div class="pricing-card featured" style="transform:none;">
+              <div class="plan-name">Daily Access</div>
+              <div class="plan-price">${formatPrice(dailyPrice)}</div>
+              <span class="plan-currency">${c.currency || 'KES'}</span>
+              <div class="plan-desc">24‑hour access to daily sure picks</div>
+              <a href="https://t.me/Angelpet09" target="_blank" class="plan-cta">Buy Now</a>
+            </div>
+          `;
+
+            // ─── VIP / DAILY / SPECIAL lock states ───
+            // VIP
+            if (localStorage.getItem('vip_sx') === 'granted') {
+                document.getElementById('vip-locked').classList.add('hidden');
+                document.getElementById('vip-unlocked').classList.remove('hidden');
+                document.getElementById('vip-html-content').innerHTML = s.vipHtml || '🔒 VIP content coming soon…';
+            } else {
+                document.getElementById('vip-locked').classList.remove('hidden');
+                document.getElementById('vip-unlocked').classList.add('hidden');
+            }
+
+            // Daily
+            if (localStorage.getItem('daily_sx') === 'granted') {
+                document.getElementById('daily-locked').classList.add('hidden');
+                document.getElementById('daily-unlocked').classList.remove('hidden');
+                document.getElementById('daily-html-content').innerHTML = s.dailyHtml || '📅 Daily picks will appear here.';
+            } else {
+                document.getElementById('daily-locked').classList.remove('hidden');
+                document.getElementById('daily-unlocked').classList.add('hidden');
+            }
+
+            // SPECIAL
+            if (localStorage.getItem('special_sx') === 'granted') {
+                document.getElementById('special-locked').classList.add('hidden');
+                document.getElementById('special-unlocked').classList.remove('hidden');
+                // Populate sub-tabs with their respective HTML
+                document.getElementById('sub-correctscore').innerHTML = s.specialCorrect || '📊 Correct Score picks will appear here.';
+                document.getElementById('sub-draws').innerHTML = s.specialDraws || '🤝 Draws predictions will appear here.';
+                document.getElementById('sub-over').innerHTML = s.specialOver || '📈 Over/Under picks will appear here.';
+                // Set active sub-tab
+                switchSpecialSub(activeSpecialSub);
+            } else {
+                document.getElementById('special-locked').classList.remove('hidden');
+                document.getElementById('special-unlocked').classList.add('hidden');
+            }
+        }
+
+        // ─── SWITCH SPECIAL SUB-TAB ───
+        function switchSpecialSub(sub) {
+            activeSpecialSub = sub;
+            localStorage.setItem('soccerex_special_sub', sub);
+            // Update buttons
+            document.querySelectorAll('#specialSubTabs .sub-tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.sub === sub);
+            });
+            // Update content
+            document.querySelectorAll('.sub-tab-content').forEach(el => {
+                el.classList.toggle('active', el.id === 'sub-' + sub);
+            });
+        }
+
+        // Event listener for sub-tab buttons (delegated)
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest('#specialSubTabs .sub-tab-btn');
+            if (btn) {
+                const sub = btn.dataset.sub;
+                if (sub) switchSpecialSub(sub);
+            }
+        });
+
+        function formatPrice(num) {
+            if (num === undefined || num === null) return '0';
+            return Number(num).toLocaleString();
+        }
+
+        function populateCountryDropdown() {
+            const select = document.getElementById('countrySelect');
+            const keys = Object.keys(countryPrices).sort();
+            select.innerHTML = keys.map(key => {
+                const c = countryPrices[key];
+                return `<option value="${key}">${c.flag || '🌍'} ${c.name} (${c.currency})</option>`;
+            }).join('');
+            if (selectedCountry && countryPrices[selectedCountry]) {
+                select.value = selectedCountry;
+            }
+        }
+
+        function updateCountryDisplay() {
+            const c = countryPrices[selectedCountry];
+            if (c) {
+                document.getElementById('selectedFlag').textContent = c.flag || '🌍';
+            }
+            const select = document.getElementById('countrySelect');
+            if (select && selectedCountry) {
+                select.value = selectedCountry;
+            }
+        }
+
+        window.changeCountry = (code) => {
+            if (countryPrices[code]) {
+                selectedCountry = code;
+                localStorage.setItem('soccerex_country', code);
+                updateCountryDisplay();
+                renderAll();
+                window.showToast(`Switched to ${countryPrices[code].name} (${countryPrices[code].currency})`, 'info', 2000);
+            }
+        };
+
+        function escHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>"]/g, (m) => {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                if (m === '"') return '&quot;';
+                return m;
+            });
+        }
+
+        window.setDay = (i) => { curDay = i;
+            renderAll(); };
+        window.showTab = (t) => {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            const el = document.getElementById('tab-' + t);
+            if (el) el.classList.remove('hidden');
+        };
+
+        window.unlockAccess = async (type) => {
+            const input = document.getElementById(type + '-entry-code').value;
+            try {
+                const snap = await get(ref(db, 'accessCodes/' + type));
+                if (input === snap.val()) {
+                    localStorage.setItem(type + '_sx', 'granted');
+                    renderAll();
+                    window.showToast('Access granted!', 'success');
+                } else {
+                    window.showToast('Invalid access code. Please try again.', 'error');
+                }
+            } catch (err) {
+                window.showToast('Error checking code: ' + err.message, 'error');
+            }
+        };
+
+        window.clearSession = () => {
+            localStorage.clear();
+            location.reload();
+        };
+
+        window.toggleFaq = (el) => {
+            const ans = el.querySelector('.faq-ans');
+            const arrow = el.querySelector('.faq-arrow');
+            if (ans) ans.classList.toggle('show');
+            if (arrow) arrow.classList.toggle('open');
+        };
+
+        // ─── ADMIN: SECTION TOGGLE ───
+        window.toggleAdmSection = (headerEl) => {
+            const body = headerEl.parentElement.querySelector('.adm-section-body');
+            const icon = headerEl.querySelector('.toggle-icon');
+            if (body) body.classList.toggle('open');
+            if (icon) icon.classList.toggle('open');
+        };
+
+        // ─── ADMIN: GLOBAL SETTINGS (including three special HTML fields) ───
+        window.saveGlobalSettings = async () => {
+            window.showLoading(true);
+            try {
+                const weekly = parseInt(document.getElementById('adm-vip-weekly').value) || 5000;
+                const monthly = parseInt(document.getElementById('adm-vip-monthly').value) || 25000;
+                const quarterly = parseInt(document.getElementById('adm-vip-quarterly').value) || 70000;
+                const daily = parseInt(document.getElementById('adm-daily-price').value) || 3000;
+
+                await update(ref(db, 'settings'), {
+                    accuracy: document.getElementById('adm-accuracy').value,
+                    vipHtml: document.getElementById('adm-vip-html').value,
+                    dailyHtml: document.getElementById('adm-daily-html').value,
+                    specialCorrect: document.getElementById('adm-special-correct').value,
+                    specialDraws: document.getElementById('adm-special-draws').value,
+                    specialOver: document.getElementById('adm-special-over').value,
+                    vipPrices: { weekly, monthly, quarterly },
+                    dailyPrice: daily,
+                    lastUpdated: new Date().toISOString()
+                });
+                window.showToast('Settings & prices saved!', 'success');
+            } catch (err) {
+                window.showToast('Error saving settings: ' + err.message, 'error');
+            } finally {
+                window.showLoading(false);
+            }
+        };
+
+        // ─── ADMIN: CODES (including special) ───
+        window.saveNewCodes = async () => {
+            window.showLoading(true);
+            try {
+                await update(ref(db, 'accessCodes'), {
+                    vip: document.getElementById('adm-vip-code').value,
+                    daily: document.getElementById('adm-daily-code').value,
+                    special: document.getElementById('adm-special-code').value
+                });
+                window.showToast('Access codes updated!', 'success');
+            } catch (err) {
+                window.showToast('Error updating codes: ' + err.message, 'error');
+            } finally {
+                window.showLoading(false);
+            }
+        };
+
+        // ─── ADMIN: PICKS (unchanged) ───
+        window.addPickRow = (p = {}) => {
+            const area = document.getElementById('adm-picks-area');
+            const div = document.createElement('div');
+            div.className = 'adm-p-row';
+            div.dataset.match = (p.match || '').toLowerCase();
+            div.innerHTML = `
+            <input class="m" value="${escHtml(p.match || '')}" placeholder="Team A vs Team B" style="flex:2;" />
+            <input class="p" value="${escHtml(p.pick || '')}" placeholder="Pick (e.g. Home Win)" style="flex:1.5;" />
+            <input class="o" value="${escHtml(p.odds || '')}" placeholder="Odds" style="flex:0.8;" />
+            <input class="t" value="${escHtml(p.time || '')}" placeholder="Time" style="flex:0.7;max-width:90px;" />
+            <select class="d" style="flex:0.8;">
+              ${days.map((d, i) => `<option value="${i}" ${(p.day !== undefined && parseInt(p.day) === i) ? 'selected' : ''}>${d}</option>`).join('')}
+            </select>
+            <select class="s" style="flex:0.8;">
+              <option value="">Pending</option>
+              <option value="won" ${p.status === 'won' ? 'selected' : ''}>Won</option>
+              <option value="lost" ${p.status === 'lost' ? 'selected' : ''}>Lost</option>
+            </select>
+            <button class="adm-delete-btn" onclick="this.parentElement.remove();">✕</button>
+          `;
+            area.appendChild(div);
+        };
+
+        window.filterPickRows = () => {
+            const q = (document.getElementById('adm-pick-search').value || '').toLowerCase();
+            document.querySelectorAll('.adm-p-row').forEach(row => {
+                const match = row.dataset.match || '';
+                row.style.display = match.includes(q) ? 'flex' : 'none';
+            });
+        };
+
+        window.clearAllPickRows = () => {
+            if (confirm('Delete all prediction rows? (This does NOT affect the database until you publish.)')) {
+                document.getElementById('adm-picks-area').innerHTML = '';
+                window.showToast('All rows cleared locally.', 'info');
+            }
+        };
+
+        window.saveAllPicks = async () => {
+            window.showLoading(true);
+            try {
+                const list = [];
+                document.querySelectorAll('.adm-p-row').forEach(r => {
+                    const match = r.querySelector('.m')?.value || '';
+                    const pick = r.querySelector('.p')?.value || '';
+                    const odds = r.querySelector('.o')?.value || '';
+                    const time = r.querySelector('.t')?.value || '';
+                    const day = r.querySelector('.d')?.value || '0';
+                    const status = r.querySelector('.s')?.value || '';
+                    list.push({ match, pick, odds, time, day: parseInt(day), status });
+                });
+                await set(ref(db, 'picks'), list);
+                await update(ref(db, 'settings'), { lastUpdated: new Date().toISOString() });
+                window.showToast(`Published ${list.length} picks!`, 'success');
+            } catch (err) {
+                window.showToast('Error publishing picks: ' + err.message, 'error');
+            } finally {
+                window.showLoading(false);
+            }
+        };
+
+        // ─── ADMIN: PROOFS (unchanged) ───
+        window.addProofRow = (url = '') => {
+            const area = document.getElementById('adm-proofs-area');
+            const div = document.createElement('div');
+            div.className = 'adm-proof-row';
+            div.innerHTML = `
+            <input class="p-url" value="${escHtml(url)}" placeholder="Direct Image Link (https://…)" />
+            <button class="adm-proof-delete" onclick="this.parentElement.remove();">✕</button>
+          `;
+            area.appendChild(div);
+        };
+
+        window.clearAllProofRows = () => {
+            if (confirm('Delete all proof rows locally?')) {
+                document.getElementById('adm-proofs-area').innerHTML = '';
+                window.showToast('All proof rows cleared.', 'info');
+            }
+        };
+
+        window.saveAllProofs = async () => {
+            window.showLoading(true);
+            try {
+                const list = [];
+                document.querySelectorAll('.p-url').forEach(i => {
+                    const url = i.value.trim();
+                    if (url) list.push({ url });
+                });
+                await set(ref(db, 'proofs'), list);
+                await update(ref(db, 'settings'), { lastUpdated: new Date().toISOString() });
+                window.showToast(`Gallery updated with ${list.length} images!`, 'success');
+            } catch (err) {
+                window.showToast('Error updating gallery: ' + err.message, 'error');
+            } finally {
+                window.showLoading(false);
+            }
+        };
+
+        // ─── ADMIN: FAQ (unchanged) ───
+        window.addFaqRow = (q = '', a = '') => {
+            const area = document.getElementById('adm-faq-area');
+            const div = document.createElement('div');
+            div.className = 'adm-faq-row';
+            div.innerHTML = `
+            <input class="fq" value="${escHtml(q)}" placeholder="Question" />
+            <textarea class="fa" placeholder="Answer">${escHtml(a)}</textarea>
+            <button class="adm-faq-delete" onclick="this.parentElement.remove();">✕ Delete</button>
+          `;
+            area.appendChild(div);
+        };
+
+        window.clearAllFaqRows = () => {
+            if (confirm('Delete all FAQ rows locally?')) {
+                document.getElementById('adm-faq-area').innerHTML = '';
+                window.showToast('FAQ rows cleared.', 'info');
+            }
+        };
+
+        window.saveAllFaq = async () => {
+            window.showLoading(true);
+            try {
+                const list = [];
+                document.querySelectorAll('.adm-faq-row').forEach(r => {
+                    const q = r.querySelector('.fq')?.value || '';
+                    const a = r.querySelector('.fa')?.value || '';
+                    if (q.trim() || a.trim()) list.push({ question: q, answer: a });
+                });
+                await update(ref(db, 'settings'), { faq: list, lastUpdated: new Date().toISOString() });
+                window.showToast(`FAQ saved with ${list.length} entries!`, 'success');
+            } catch (err) {
+                window.showToast('Error saving FAQ: ' + err.message, 'error');
+            } finally {
+                window.showLoading(false);
+            }
+        };
+
+        // ─── ADMIN: COUNTRY PRICING (unchanged) ───
+        window.addCountryRow = (c = null) => {
+            const area = document.getElementById('adm-countries-area');
+            const div = document.createElement('div');
+            div.className = 'adm-country-row';
+            const defaultCountry = c || { code: '', name: '', flag: '🌍', currency: 'KES', vipWeekly: '', vipMonthly: '', vipQuarterly: '', daily: '' };
+            div.innerHTML = `
+            <div class="country-fields">
+              <input class="c-code" value="${escHtml(defaultCountry.code || '')}" placeholder="Code (e.g. KE)" style="max-width:80px;" />
+              <input class="c-name" value="${escHtml(defaultCountry.name || '')}" placeholder="Country Name" />
+              <input class="c-flag" value="${escHtml(defaultCountry.flag || '')}" placeholder="Flag emoji" style="max-width:60px;" />
+              <input class="c-currency" value="${escHtml(defaultCountry.currency || '')}" placeholder="Currency (e.g. KES)" style="max-width:100px;" />
+              <input class="c-vipw" value="${defaultCountry.vipWeekly || ''}" placeholder="VIP Weekly" />
+              <input class="c-vipm" value="${defaultCountry.vipMonthly || ''}" placeholder="VIP Monthly" />
+              <input class="c-vipq" value="${defaultCountry.vipQuarterly || ''}" placeholder="VIP Quarterly" />
+              <input class="c-daily" value="${defaultCountry.daily || ''}" placeholder="Daily Price" />
+            </div>
+            <button class="country-delete" onclick="this.parentElement.remove();">🗑️ Delete Country</button>
+          `;
+            area.appendChild(div);
+        };
+
+        window.clearAllCountryRows = () => {
+            if (confirm('Delete all country rows locally?')) {
+                document.getElementById('adm-countries-area').innerHTML = '';
+                window.showToast('All country rows cleared.', 'info');
+            }
+        };
+
+        window.saveAllCountries = async () => {
+            window.showLoading(true);
+            try {
+                const list = {};
+                document.querySelectorAll('.adm-country-row').forEach(r => {
+                    const code = r.querySelector('.c-code')?.value?.trim().toUpperCase() || '';
+                    const name = r.querySelector('.c-name')?.value?.trim() || '';
+                    const flag = r.querySelector('.c-flag')?.value?.trim() || '🌍';
+                    const currency = r.querySelector('.c-currency')?.value?.trim() || 'KES';
+                    const vipWeekly = parseInt(r.querySelector('.c-vipw')?.value) || 0;
+                    const vipMonthly = parseInt(r.querySelector('.c-vipm')?.value) || 0;
+                    const vipQuarterly = parseInt(r.querySelector('.c-vipq')?.value) || 0;
+                    const daily = parseInt(r.querySelector('.c-daily')?.value) || 0;
+                    if (code && name) {
+                        list[code] = { code, name, flag, currency, vipWeekly, vipMonthly, vipQuarterly, daily };
+                    }
+                });
+                const current = appData.settings?.countryPrices || {};
+                const merged = { ...current };
+                Object.keys(list).forEach(key => {
+                    merged[key] = list[key];
+                });
+                await update(ref(db, 'settings'), {
+                    countryPrices: merged,
+                    lastUpdated: new Date().toISOString()
+                });
+                window.showToast(`Saved ${Object.keys(list).length} countries!`, 'success');
+            } catch (err) {
+                window.showToast('Error saving countries: ' + err.message, 'error');
+            } finally {
+                window.showLoading(false);
+            }
+        };
+
+        // ─── ADMIN: TOOLS (unchanged) ───
+        window.forceRefresh = () => {
+            window.showLoading(true);
+            setTimeout(() => {
+                window.showLoading(false);
+                window.showToast('Data refreshed!', 'success');
+            }, 600);
+        };
+
+        window.clearAllData = async () => {
+            if (!confirm('⚠️ This will DELETE ALL DATA from Firebase. Are you sure?')) return;
+            if (!confirm('Really? This is irreversible!')) return;
+            window.showLoading(true);
+            try {
+                await set(ref(db, '/'), {
+                    picks: [],
+                    proofs: [],
+                    settings: {
+                        accuracy: '88%',
+                        vipHtml: '',
+                        dailyHtml: '',
+                        specialCorrect: '',
+                        specialDraws: '',
+                        specialOver: '',
+                        faq: [],
+                        lastUpdated: new Date().toISOString(),
+                        countryPrices: defaultCountries
+                    },
+                    accessCodes: { vip: 'vip123', daily: 'daily123', special: 'special123' }
+                });
+                window.showToast('All data has been reset.', 'info');
+            } catch (err) {
+                window.showToast('Error resetting data: ' + err.message, 'error');
+            } finally {
+                window.showLoading(false);
+            }
+        };
+
+        // ─── ADMIN PANEL TOGGLE ───
+        document.getElementById('adminTrigger').onclick = () => {
+            const p = document.getElementById('adminPanel');
+            const isVisible = p.style.display === 'block';
+            p.style.display = isVisible ? 'none' : 'block';
+            if (!isVisible) {
+                const s = appData.settings || {};
+                document.getElementById('adm-accuracy').value = s.accuracy || '';
+                document.getElementById('adm-vip-html').value = s.vipHtml || '';
+                document.getElementById('adm-daily-html').value = s.dailyHtml || '';
+                document.getElementById('adm-special-correct').value = s.specialCorrect || '';
+                document.getElementById('adm-special-draws').value = s.specialDraws || '';
+                document.getElementById('adm-special-over').value = s.specialOver || '';
+
+                const vipP = s.vipPrices || { weekly: 5000, monthly: 25000, quarterly: 70000 };
+                document.getElementById('adm-vip-weekly').value = vipP.weekly || '';
+                document.getElementById('adm-vip-monthly').value = vipP.monthly || '';
+                document.getElementById('adm-vip-quarterly').value = vipP.quarterly || '';
+                document.getElementById('adm-daily-price').value = s.dailyPrice || '';
+
+                document.getElementById('adm-countries-area').innerHTML = '';
+                const cp = s.countryPrices || defaultCountries;
+                Object.keys(cp).forEach(key => {
+                    window.addCountryRow(cp[key]);
+                });
+
+                document.getElementById('adm-picks-area').innerHTML = '';
+                (appData.picks || []).forEach(p => window.addPickRow(p));
+
+                document.getElementById('adm-proofs-area').innerHTML = '';
+                (appData.proofs || []).forEach(p => window.addProofRow(p.url));
+
+                document.getElementById('adm-faq-area').innerHTML = '';
+                (s.faq || []).forEach(item => window.addFaqRow(item.question, item.answer));
+
+                document.querySelectorAll('.adm-section-body').forEach(el => el.classList.add('open'));
+                document.querySelectorAll('.toggle-icon').forEach(el => el.classList.add('open'));
+
+                window.showToast('Admin panel loaded', 'info', 1500);
+            }
+        };
+
+        // ─── KEYBOARD SHORTCUT: Ctrl+Shift+A ───
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+                e.preventDefault();
+                document.getElementById('adminTrigger').click();
+            }
+        });
+
+        // ─── INITIAL RENDER ───
+        renderAll();
+
+        window.renderAll = renderAll;
+
+        console.log('⚽ SOCCEREX · Smart Football Intelligence loaded');
+        console.log('📌 Ctrl+Shift+A to toggle Admin Panel');
+        console.log('📨 Telegram: @Angelpet09');
+        console.log('🌍 Country pricing enabled: ' + Object.keys(countryPrices).length + ' countries');
+        console.log('🎯 Special zone has three sub-tabs: Correct Score, Draws, Over');
+    </script>
+
+</body>
+</html>
